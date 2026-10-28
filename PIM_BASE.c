@@ -518,3 +518,4 @@ void menuFiltrosAvancados() // Função para buscar o agentes por Categoria. É 
         printf(AMARELO "Ninguem nessa categoria.\n" PADRAO);
     }
 }
+// Obrigado!
