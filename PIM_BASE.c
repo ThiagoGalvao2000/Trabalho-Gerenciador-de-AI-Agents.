@@ -1,17 +1,18 @@
+// bibliotecas utilizadas.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_AGENTES 50
+#define MAX_AGENTES 50 // Limite estipulado pelo projeto.
 
-// CORES DO PROGRAMA
-#define RESET "\x1b[0m"
-#define RED "\x1b[31m"
-#define GREEN "\x1b[32m"
-#define YELLOW "\x1b[33m"
-#define CYAN "\x1b[36m"
+// Definição de cores que serão usadas no terminal.
+#define PADRAO "\x1b[0m"
+#define VERMELHO "\x1b[31m"
+#define VERDE "\x1b[32m"
+#define AMARELO "\x1b[33m"
+#define AZUL "\x1b[36m"
 
-// VETORES GLOBAIS
+// Definição de caracteres máximos por dado da ia.
 int ids[MAX_AGENTES];
 char nomes[MAX_AGENTES][81];
 char scripts[MAX_AGENTES][1001];
@@ -20,7 +21,7 @@ char categorias[MAX_AGENTES][50];
 
 int total_agentes = 0;
 
-// FUNÇÕES
+// Criação (vazia) de todas as funções que seráo usadas.
 void carregarDados();
 void salvarDados();
 void confirmarSalvamento();
@@ -30,22 +31,22 @@ void buscarPorId();
 void buscarPorNome();
 void menuFiltrosAvancados();
 
-int main()
+int main() // Bloco principal.
 {
     carregarDados();
     int opcao;
 
     do
     {
-        printf(CYAN "\n========================================\n" RESET);
-        printf(CYAN "          AI AGENT REGISTRY\n" RESET);
-        printf(CYAN "========================================\n" RESET);
+        printf(AZUL "\n========================================\n" PADRAO);
+        printf(AZUL "          AI AGENT REGISTRY\n" PADRAO);
+        printf(AZUL "========================================\n" PADRAO);
         printf("1. Cadastrar novo agente\n");
         printf("2. Listar todos os agentes\n");
         printf("3. Buscar agente por ID\n");
         printf("4. Buscar agente por Nome\n");
         printf("5. Filtros Avancados (Categoria)\n");
-        printf(RED "0. Encerrar programa\n" RESET);
+        printf(VERMELHO "0. Encerrar programa\n" PADRAO);
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
         getchar();
@@ -68,22 +69,22 @@ int main()
             menuFiltrosAvancados();
             break;
         case 0:
-            printf(YELLOW "\nEncerrando o programa...\n" RESET);
+            printf(AMARELO "\nEncerrando o programa...\n" PADRAO);
             break;
         default:
-            printf(RED "\nOpcao invalida!\n" RESET);
+            printf(VERMELHO "\nOpcao invalida!\n" PADRAO);
         }
-    } while (opcao != 0);
+    } while (opcao != 0); // Looping para repetir o menu.
 
     return 0;
 }
 
-void carregarDados()
+void carregarDados() // Função para ler os dados do arquivo TXT.
 {
     FILE *arquivo = fopen("agentes.txt", "r");
     if (arquivo == NULL)
     {
-        printf(YELLOW "Arquivo agentes.txt nao encontrado. O banco comecara vazio.\n" RESET);
+        printf(AMARELO "Arquivo agentes.txt nao encontrado. O banco comecara vazio.\n" PADRAO);
         return;
     }
 
@@ -100,52 +101,52 @@ void carregarDados()
     fclose(arquivo);
 }
 
-void salvarDados()
+void salvarDados() // Função para escrever dados novos no arquivo TXT. Vem após a confirmação
 {
     FILE *arquivo = fopen("agentes.txt", "w");
     if (arquivo == NULL)
     {
-        printf(RED "Erro ao criar o arquivo de salvamento!\n" RESET);
+        printf(VERMELHO "Erro ao criar o arquivo de salvamento!\n" PADRAO);
         return;
     }
 
     for (int i = 0; i < total_agentes; i++)
     {
-        fprintf(arquivo, "%d|%s|%s|%d|%s\n", ids[i], nomes[i], scripts[i], notas[i], categorias[i]);
+        fprintf(arquivo, "%d|%s|%s|%d|%s\n", ids[i], nomes[i], scripts[i], notas[i], categorias[i]); // Formato que será escrito a tabela.
     }
     fclose(arquivo);
 }
 
-void confirmarSalvamento()
+void confirmarSalvamento() // função para confirmar se as alterações no TXT devem ser salvas.
 {
     int resp;
     do
     {
-        printf(YELLOW "\nDeseja salvar as alteracoes no arquivo? (1 - Sim / 2 - Nao): " RESET);
+        printf(AMARELO "\nDeseja salvar as alteracoes no arquivo? (1 - Sim / 2 - Nao): " PADRAO);
         scanf("%d", &resp);
         getchar();
 
         if (resp == 1)
         {
             salvarDados();
-            printf(GREEN "Dados salvos com sucesso!\n" RESET);
+            printf(VERDE "Dados salvos com sucesso!\n" PADRAO);
         }
         else if (resp == 2)
         {
-            printf(YELLOW "Alteracoes mantidas apenas na memoria (nao foram pro arquivo).\n" RESET);
+            printf(AMARELO "Alteracoes mantidas apenas na memoria.\n" PADRAO);
         }
         else
         {
-            printf(RED "Opcao invalida. Digite 1 para Sim ou 2 para Nao.\n" RESET);
+            printf(VERMELHO "Opcao invalida. Digite 1 para Sim ou 2 para Nao.\n" PADRAO);
         }
     } while (resp != 1 && resp != 2);
 }
 
-void cadastrarAgente()
+void cadastrarAgente() // Função para cadastrar um novo agente no "Banco"
 {
     if (total_agentes >= MAX_AGENTES)
     {
-        printf(RED "\nErro: Limite maximo atingido!\n" RESET);
+        printf(VERMELHO "\nErro: Limite maximo atingido!\n" PADRAO);
         return;
     }
 
@@ -167,8 +168,8 @@ void cadastrarAgente()
     } while (id_em_uso == 1);
 
     ids[total_agentes] = novo_id;
-    printf(CYAN "\n--- NOVO CADASTRO ---\n" RESET);
-    printf("ID gerado: " GREEN "%d\n" RESET, novo_id);
+    printf(AZUL "\n--- NOVO CADASTRO ---\n" PADRAO);
+    printf("ID gerado: " VERDE "%d\n" PADRAO, novo_id);
 
     printf("Nome do agente (ate 80 letras): ");
     fgets(nomes[total_agentes], 81, stdin);
@@ -207,22 +208,22 @@ void cadastrarAgente()
             strcpy(categorias[total_agentes], "Recursos Humanos");
             break;
         default:
-            printf(RED "Opcao invalida.\n" RESET);
+            printf(VERMELHO "Opcao invalida.\n" PADRAO);
             op_categoria = 0;
         }
     } while (op_categoria == 0);
 
     total_agentes++;
-    printf(GREEN "\nCadastro concluido!\n" RESET);
+    printf(VERDE "\nCadastro concluido!\n" PADRAO);
 
     confirmarSalvamento();
 }
 
-void listarAgentes()
+void listarAgentes() // Função que exibe a tabela de agentes cadastrados.
 {
     if (total_agentes == 0)
     {
-        printf(YELLOW "\nNenhum agente cadastrado.\n" RESET);
+        printf(AMARELO "\nNenhum agente cadastrado.\n" PADRAO);
         return;
     }
 
@@ -258,14 +259,14 @@ void listarAgentes()
         }
     }
 
-    printf(CYAN "\n--- LISTA GERAL (ORDENADA POR ID) ---\n" RESET);
+    printf(AZUL "\n--- LISTA GERAL (ORDENADA POR ID) ---\n" PADRAO);
     for (int i = 0; i < total_agentes; i++)
     {
-        printf("ID: " GREEN "%d" RESET " | Nome: %s | Categoria: %s | Nota: %d\n", ids[i], nomes[i], categorias[i], notas[i]);
+        printf("ID: " VERDE "%d" PADRAO " | Nome: %s | Categoria: %s | Nota: %d\n", ids[i], nomes[i], categorias[i], notas[i]);
     }
 }
 
-void buscarPorId()
+void buscarPorId() // Função para buscar algum agente apenas pelo seu ID.
 {
     if (total_agentes == 0)
         return;
@@ -286,11 +287,11 @@ void buscarPorId()
 
     if (indice_encontrado == -1)
     {
-        printf(RED "\nAgente nao encontrado.\n" RESET);
+        printf(VERMELHO "\nAgente nao encontrado.\n" PADRAO);
         return;
     }
 
-    printf(CYAN "\n--- DADOS ---\n" RESET);
+    printf(AZUL "\n--- DADOS ---\n" PADRAO);
     printf("ID: %d\nNome: %s\nCategoria: %s\nNota: %d\nScript: %s\n",
            ids[indice_encontrado], nomes[indice_encontrado], categorias[indice_encontrado], notas[indice_encontrado], scripts[indice_encontrado]);
 
@@ -338,12 +339,12 @@ void buscarPorId()
                 strcpy(categorias[indice_encontrado], "Recursos Humanos");
                 break;
             default:
-                printf(RED "Invalido.\n" RESET);
+                printf(VERMELHO "Invalido.\n" PADRAO);
                 op_cat = 0;
             }
         } while (op_cat == 0);
 
-        printf(GREEN "\nEditado com sucesso!\n" RESET);
+        printf(VERDE "\nEditado com sucesso!\n" PADRAO);
         confirmarSalvamento();
     }
     else if (acao == 2)
@@ -357,12 +358,12 @@ void buscarPorId()
             strcpy(categorias[j], categorias[j + 1]);
         }
         total_agentes--;
-        printf(GREEN "\nAgente apagado com sucesso!\n" RESET);
+        printf(VERDE "\nAgente apagado com sucesso!\n" PADRAO);
         confirmarSalvamento();
     }
 }
 
-void buscarPorNome()
+void buscarPorNome() // Função que busca o agente pelo nome exato.
 {
     if (total_agentes == 0)
         return;
@@ -385,11 +386,11 @@ void buscarPorNome()
 
     if (indice_encontrado == -1)
     {
-        printf(RED "\nNao achou.\n" RESET);
+        printf(VERMELHO "\nNao achou.\n" PADRAO);
         return;
     }
 
-    printf(CYAN "\n--- DADOS ---\n" RESET);
+    printf(AZUL "\n--- DADOS ---\n" PADRAO);
     printf("ID: %d\nNome: %s\nCategoria: %s\nNota: %d\nScript: %s\n",
            ids[indice_encontrado], nomes[indice_encontrado], categorias[indice_encontrado], notas[indice_encontrado], scripts[indice_encontrado]);
 
@@ -437,12 +438,12 @@ void buscarPorNome()
                 strcpy(categorias[indice_encontrado], "Recursos Humanos");
                 break;
             default:
-                printf(RED "Invalido.\n" RESET);
+                printf(VERMELHO "Invalido.\n" PADRAO);
                 op_cat = 0;
             }
         } while (op_cat == 0);
 
-        printf(GREEN "\nEditado com sucesso!\n" RESET);
+        printf(VERDE "\nEditado com sucesso!\n" PADRAO);
         confirmarSalvamento();
     }
     else if (acao == 2)
@@ -456,16 +457,16 @@ void buscarPorNome()
             strcpy(categorias[j], categorias[j + 1]);
         }
         total_agentes--;
-        printf(GREEN "\nAgente apagado com sucesso!\n" RESET);
+        printf(VERDE "\nAgente apagado com sucesso!\n" PADRAO);
         confirmarSalvamento();
     }
 }
 
-void menuFiltrosAvancados()
+void menuFiltrosAvancados() // Função para buscar o agentes por Categoria. É o nosso diferencial!
 {
     if (total_agentes == 0)
     {
-        printf(YELLOW "\nNada pra filtrar.\n" RESET);
+        printf(AMARELO "\nNada pra filtrar.\n" PADRAO);
         return;
     }
 
@@ -473,7 +474,7 @@ void menuFiltrosAvancados()
     int encontrou = 0;
     int op_categoria;
 
-    printf(CYAN "\n--- FILTRO ---\n" RESET);
+    printf(AZUL "\n--- FILTRO ---\n" PADRAO);
     do
     {
         printf("Qual Categoria?\n");
@@ -496,7 +497,7 @@ void menuFiltrosAvancados()
             strcpy(categoria_busca, "Recursos Humanos");
             break;
         default:
-            printf(RED "Opcao invalida.\n\n" RESET);
+            printf(VERMELHO "Opcao invalida.\n\n" PADRAO);
             op_categoria = 0;
         }
     } while (op_categoria == 0);
@@ -507,13 +508,13 @@ void menuFiltrosAvancados()
     {
         if (strcmp(categorias[i], categoria_busca) == 0)
         {
-            printf("ID: " GREEN "%d" RESET " | Nome: %s | Nota: %d\n", ids[i], nomes[i], notas[i]);
+            printf("ID: " VERDE "%d" PADRAO " | Nome: %s | Nota: %d\n", ids[i], nomes[i], notas[i]);
             encontrou = 1;
         }
     }
 
     if (!encontrou)
     {
-        printf(YELLOW "Ninguem nessa categoria.\n" RESET);
+        printf(AMARELO "Ninguem nessa categoria.\n" PADRAO);
     }
 }
